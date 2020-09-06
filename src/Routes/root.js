@@ -19,8 +19,9 @@ Rutas.get('/index', (req, res) => {
 })
 
 
-Rutas.get('/tablas', (req,res) => {
-  res.sendFile(path.resolve(__dirname, '../public/TablaDeDatos.html'));
+Rutas.get('/tablas', (req, res) => {
+  
+  res.render('Table',{woo:'SERVER SIDE RENDENRING'});
 })
 
 module.exports = Rutas;

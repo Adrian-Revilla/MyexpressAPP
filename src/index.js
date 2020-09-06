@@ -2,8 +2,11 @@ const express = require('express');
 const path = require('path');
 const APP = express();
 const helmet = require('helmet');
+
 const Rutas_raiz = require('./Routes/root')
 
+APP.set('views',path.resolve(__dirname,'./views/'))
+APP.set('view engine','ejs');
 
 
 
@@ -27,4 +30,6 @@ APP.use((req, res) => {
 });
 
 
-APP.listen(8000);
+APP.listen(8000, () => {
+  console.log(APP.get('views'));
+});
