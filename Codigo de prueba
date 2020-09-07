@@ -1,5 +1,0 @@
-ESTO SIGNIFICA QUE PUEDO REDIGIR RECURSOS SIN USAR 'SENDFILE'
-APP.use('/xxd/d', (req,res) => {
-  //302 STATUS
-  res.redirect('/static/style.css')
-})

@@ -1,18 +1,19 @@
 const express = require('express');
 const path = require('path');
-const APP = express();
 const helmet = require('helmet');
+
+
+const APP = express();
 
 const Rutas_raiz = require('./Routes/root')
 
 APP.set('views',path.resolve(__dirname,'./views/'))
 APP.set('view engine','ejs');
 
-
-
 //seguridad basica. modifica headers de respuesta importantes.
 //NOTA: algunas opciones de helmet no permiten incluir librarias de tercer de javascript, por seguridad
 APP.use(helmet());
+
 
 
 // SOLO IMPORTA ARCHIVOS ESTATICOS para que este disponible bajo la ruta "/static".
@@ -30,6 +31,8 @@ APP.use((req, res) => {
 });
 
 
-APP.listen(8000, () => {
-  console.log(APP.get('views'));
-});
+
+
+
+APP.listen(8000, () => console.log('init'));  
+

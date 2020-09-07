@@ -1,0 +1,55 @@
+ESTO SIGNIFICA QUE PUEDO REDIGIR RECURSOS SIN USAR 'SENDFILE'
+APP.use('/xxd/d', (req,res) => {
+  //302 STATUS
+  res.redirect('/static/style.css')
+})
+
+para enviar datos en un formulario de frontEnd con javascript, se puede hacer preventDefault,
+convertir a json Y luego enviarlo con fetch api.
+
+
+ SOLO PARA RESPUESTA JSON (SE USA BODY PARSER), enconed json 
+ sera para ejecutar el middleware de body_parser
+
+ LADO BACKEND
+const body_parser = require('body-parser');
+const EncodedJson = body_parser.json(); 
+ Rutas.post('/submit', EncodedJson, (req, res) => {
+   res.send(req.body)
+ })
+
+ LADO FRONTEND:
+
+ 
+ LA funcion serializar incluye correctamente datos tipo blob, sin embargo:
+
+ el server de node NO procesa archivos tipo file, se necesita un handler tipo multipart (multer puede ser)
+ el server solo procesa json
+
+ Form.addEventListener('submit', (e) => {
+   e.preventDefault();
+   console.log('Enviando...')
+   let serializado = serialize(Form);
+   fetch('/submit', {
+     method: 'POST',
+     body: serializado,
+     headers: {
+       'Content-type': 'application/json'
+     }
+   }).then(res => res.json())
+     .then(data => console.log(data))
+ })
+
+
+ const serializar = (elementoForm) => {
+
+  let obj = {};
+  let formData = new FormData(elementoForm);
+
+  for (let key of formData.keys()) {
+
+    obj[key] = formData.get(key);
+  }
+  console.log(obj)
+  return JSON.stringify(obj);
+}
