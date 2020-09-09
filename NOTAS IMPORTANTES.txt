@@ -53,3 +53,22 @@ const EncodedJson = body_parser.json();
   console.log(obj)
   return JSON.stringify(obj);
 }
+
+
+
+
+
+
+
+try {
+    const respuesta = await DB.query("SELECT * FROM nodetest");  
+    console.log(respuesta.rows)
+    obj.success = true;    
+
+  } catch (e) {
+    console.log(e.message)
+    obj.success = false;
+
+  } finally {
+    res.send(JSON.stringify(obj))
+  }

@@ -1,38 +1,27 @@
-const express = require('express');
 const path = require('path');
+const express = require('express');
 const helmet = require('helmet');
 
+const app = express();
 
-const APP = express();
-
-const Rutas_raiz = require('./Routes/root')
-
-APP.set('views',path.resolve(__dirname,'./views/'))
-APP.set('view engine','ejs');
+app.set('views',path.resolve(__dirname,'./views/'))
+app.set('view engine','ejs');
 
 //seguridad basica. modifica headers de respuesta importantes.
-//NOTA: algunas opciones de helmet no permiten incluir librarias de tercer de javascript, por seguridad
-APP.use(helmet());
+//NOTA: algunas opciones de helmet no permiten incluir librarias de terceros de javascript, por seguridad
+app.use(helmet());
 
-
-
-// SOLO IMPORTA ARCHIVOS ESTATICOS para que este disponible bajo la ruta "/static".
-// esta ruta esta disponible para toda la app de Express
-APP.use('/static',express.static(path.resolve(__dirname, 'public/assets')));
+// esta ruta esta disponible para toda la app de Express, se usa para toda la app.
+app.use('/static',express.static(path.resolve(__dirname, 'public/assets')));
 
 // importando rutas.
-APP.use(Rutas_raiz);
-
+app.use(require('./Routes/root'));
 
 //si el codigo llega a este punto, Retorna not found 404
-APP.use((req, res) => {
+app.use((req, res) => {
   res.statusCode = 404;
   res.send('ERROR!, no se encontro pagina!')
 });
 
-
-
-
-
-APP.listen(8000, () => console.log('init'));  
+app.listen(8000, () => console.log('init'));  
 

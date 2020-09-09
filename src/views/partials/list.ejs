@@ -1,0 +1,55 @@
+<% if (data.length !== 0) { %>
+
+  <div class="row">
+  
+    <div class="col-12 col-sm-10 mx-sm-auto">
+      
+      <div class="table-responsive">
+  
+        <table id="tabla_datos" class="table table-hover table-bordered  table-sm ">
+          <caption>Lista de trabajadores</caption>
+  
+          <thead  class="thead-dark">
+            <tr>
+              <th scope="col">Nombre</th>
+              <th scope="col">Edad</th>
+              
+              <th scope="col">¿Tiene Permisos?</th>
+              <th scope="col">Identificador único</th>
+              <th scope="col" class="text-center"> Eliminar</th>
+            </tr>
+          </thead>
+  
+          <tbody >
+            <% data.forEach(info => { %>
+             <tr>
+              <td> <%= info.nombre %> </td>
+              <td> <%= info.edad %> </td>
+              <% if (info.perm) { %>
+              <td>SI</th>
+              <% }else{ %>
+              <td>NO</th>
+              <% } %>
+              <td><%= info.identificador_unico %>  </td>
+              <td class="text-center" ><button class=" btn  btn-block btn-danger delet_" data-worker="<%= info.worker_id %> ">&cross;</button></td>
+
+            </tr>
+            <% }) %>
+            
+          </tbody>
+  
+        </table>
+  
+      </div>
+  
+    </div>
+  
+  </div>
+
+
+
+
+
+<% } else { %>
+  <p class="text-center">No hay data para mostrar :(, ¡Añade algún dato con el formulario!</p>
+<% } %>

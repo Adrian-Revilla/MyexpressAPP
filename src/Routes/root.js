@@ -1,58 +1,64 @@
 const express = require('express');
 const path = require('path');
-
 const multer = require('multer');
-const carga = multer();
+const DB = require('../db_conn/db');
+const body_parser = require('body-parser');
 
-const {Client} = require('pg')
 
-const Cliente = new Client({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'dvdrental',
-  password: '123',
-  port: 5432,
+
+const Rutas = express.Router({
+  //con esta opcion. solo se puede establecer rutas que coincidan exactamente
+  //SOLO FUNCIONA BAJO ESTE ROUTER.
+  caseSensitive: true
 });
 
 
+Rutas.get('/', (req, res) => res.redirect('/index'))
 
+// solo envia el archivo , el html resolverá los archivos estaticos que necesite
+Rutas.get('/index', (req, res) => res.sendFile(path.resolve(__dirname, '../public/Bienvenida.html')))
 
-//ESTA OPCION EVITA QUE ESTE MODULO EN  ESPECIFICO ACEPTE rutas con mayusculas
-const Rutas = express.Router({
-  caseSensitive:true
-}); 
-
-
-Rutas.get('/', (req, res) => {
-  res.redirect('/index')
-})
-
-
-Rutas.get('/index', (req, res) => {
-
-  // solo envia el archivo , el html resolverá los archivos estaticos que necesite
-  res.sendFile(path.resolve(__dirname, '../public/Bienvenida.html'));
+Rutas.get('/tablas', async (req, res) => {
   
+  try {
+
+   const respuesta = await DB.query("SELECT * FROM nodetest");
+   res.render('Table', { woo: 'SERVER SIDE RENDENRING', data: respuesta.rows })
+
+  } catch (e) {
+    console.log(e.message)
+    res.send('ERROR')
+  }
+})
+
+Rutas.post('/tablas/submit', multer().none(), async (req, res) => {
+  
+  try {
+    const { Name, Age, perms,UID } = req.body;
+    const valores = [Name, Age, perms,UID];
+    const respuesta = await DB.query("INSERT INTO nodetest (nombre,edad,perm,identificador_unico) VALUES ($1,$2,$3,$4)", valores) 
+    res.send(JSON.stringify({ success: true }))
+  } catch (e) {
+    res.send(JSON.stringify({ success: false,error:'23505', message:'El identicador enviado ya existe, intente con otro valor' }))
+  }
+
 })
 
 
-Rutas.get('/tablas', (req, res) => {  
-  res.render('Table',{woo:'SERVER SIDE RENDENRING'});
-})
-
-
-Rutas.post('/submit', carga.none(), async (req, res) => {
-
- await Cliente.connect()
- const respuesta= await Cliente.query("SELECT first_name FROM customer WHERE first_name LIKE 'E%' " )
-  Cliente.end()
-  console.log(respuesta)
-  res.send('si')
+Rutas.post('/tablas/del',body_parser.json(), async (req, res) => {
+ try {
+  const id = [req.body.selected_id];
+   const respuesta = await DB.query("DELETE FROM  nodetest WHERE  worker_id = $1 ", id)  
+   res.send(JSON.stringify({data:'si'}))
    
-  
-
-  // console.log(req.body.Name)
+ } catch (error) {
+   
+   res.send(JSON.stringify({message:'hubo un error eliminado la info, intente recargar la pagina'}))
+ } 
   
 })
+
+
+
 
 module.exports = Rutas;
