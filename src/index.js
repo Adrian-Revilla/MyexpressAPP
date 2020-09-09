@@ -23,5 +23,9 @@ app.use((req, res) => {
   res.send('ERROR!, no se encontro pagina!')
 });
 
-app.listen(8000, () => console.log('init'));  
+let port = process.env.PORT;
+if (port == null || port == "") {
+  port = 8000;
+}
 
+app.listen(port);  
