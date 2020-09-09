@@ -1,15 +1,13 @@
 const {Pool} = require('pg')
 
-// const pool = new Pool({
-//   user: 'postgres',
-//   host: 'localhost',
-//   database: 'dvdrental',
-//   password: '123',
-//   port: 5432,
-// });
+let stringdb = process.env.DATABASE_URL;
+
+if (stringdb == null || stringdb == "") {
+  stringdb = 'postgres://postgres:123@localhost:5432/dvdrental'
+}
 
 const pool = new Pool({
-  connectionString:process.env.DATABASE_URL,
+  connectionString:stringdb,
   ssl: {
     rejectUnauthorized: false
   }

@@ -39,6 +39,7 @@ Rutas.post('/tablas/submit', multer().none(), async (req, res) => {
     const respuesta = await DB.query("INSERT INTO nodetest (nombre,edad,perm,identificador_unico) VALUES ($1,$2,$3,$4)", valores) 
     res.send(JSON.stringify({ success: true }))
   } catch (e) {
+    console.log(e)
     res.send(JSON.stringify({ success: false,error:'23505', message:'El identicador enviado ya existe, intente con otro valor' }))
   }
 
