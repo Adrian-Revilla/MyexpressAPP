@@ -9,6 +9,7 @@ app.set('view engine','ejs');
 
 //seguridad basica. modifica headers de respuesta importantes.
 //NOTA: algunas opciones de helmet no permiten incluir librarias de terceros de javascript, por seguridad
+//DESACTIVADO DURANTE DESARROLLO LOCAL
 app.use(helmet());
 
 // esta ruta esta disponible para toda la app de Express, se usa para toda la app.
