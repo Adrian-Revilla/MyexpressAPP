@@ -31,7 +31,7 @@ tiene como base de datos Postgresql y expressjs como framework web que une a tod
 
 * src/index.js es el punto central de la app, se inicializa middleware y se agregan rutas. 
 * src/db_conn/db.js contiene las credenciales para conectarse en una base de datos local **(estas credenciales solo funciona en un desarrollo local, 
-el link de la descripcion lleva a una web hosteada en Heroku donde si hace uso de credenciales de una Postgresql DB propocionada por también)**
+el link de la descripcion lleva a una web hosteada en Heroku donde si hace uso de credenciales de una Postgresql DB propocionada por también Heroku)**
 * src/Routes/root.js es un modulo  de rutas de express, donde está la mayoria del codigo de las rutas de la app.
 * src/views/ donde están las vistas que se renderizarán cuando se haga match de alguna ruta
 * src/public/ solo tiene archivos estaticos que usa la app **no esta empaquetada con webpack ni ninguna otra herramienta similar con el fin de mostrar el codigo**
