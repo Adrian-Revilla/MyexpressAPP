@@ -25,13 +25,9 @@ app.get('*',(req, res) => {
   res.render('Error');
 })
 
-<<<<<<< HEAD
 let port = process.env.PORT;
 if (port == null || port == "") {
   port = 8000;
 }
-=======
-app.listen(8000);  
->>>>>>> master
 
 app.listen(port);  
