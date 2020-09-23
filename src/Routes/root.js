@@ -55,7 +55,7 @@ Rutas.post('/tablas/del',express.json() , async (req, res) => {
  try {
    const id = [req.body.selected_id]
 
-   await DB.query("DELETE FROM  nodetest WHEREE  worker_id = $1 ", id)  
+   await DB.query("DELETE FROM  nodetest WHERE  worker_id = $1 ", id)  
 
    res.json({Success:true,message:''})
    
