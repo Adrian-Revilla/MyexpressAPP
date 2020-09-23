@@ -1,58 +1,40 @@
+
+
 let Form = document.querySelector('#Form_');
 let tabla = document.querySelector('#tabla_datos');
 let MYRegex = new RegExp(/[e\+\-E]/m);
+let edad = document.querySelector("#Edad")
 
-Form.addEventListener('submit', (e) => {
-  e.preventDefault();
-  //verificar que no haya + caracteres no validos en el type Number
-  let edad = document.querySelector("#Edad")
-  //si encuentra un patron como el descrito en MYREGEX, lanza una exepcion
-  
-  try {
-    if (MYRegex.test(edad.value)) {
-      return InputErr('Ingrese una cantidad válida')
-    }  
 
-  } catch (e) {
-    console.log(e.message)
+
+const HandleErr = err => {
+
+  let toast_body = document.querySelector('.toast').lastElementChild;
+
+
+
+  if (!err.message.includes("{")) {
+
+    toast_body.textContent = err.message
+
+  } else {
+
+    let parse = JSON.parse(err.message)
+
+    toast_body.textContent = 'El servidor ha respondido con una exepción:  ' + parse.message
   }
 
-  fetch('/tablas/submit', {
-    method: 'POST',
-    body: new FormData(Form),
-  })
-    .then(res => res.json())
-    .then(HandleRes)
-    .catch(HandleErr)
-})
-
-if (tabla !== null) {
-  
-  tabla.addEventListener('click', e => {
-    let hasdelet_ = e.target.classList.contains('delet_');
-    if (hasdelet_) {
-
-      //se toma el ID correspondiente de la base de datos
-      let id = { selected_id: e.target.dataset.worker }
-
-      fetch('/tablas/del', {
-        method: 'POST',
-        body: JSON.stringify(id),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-
-      })
-        .then(res => res.json())
-        .then(HandleRes)
-        .catch(HandleErr)
-    }
-
-  })
-
-
+  $('.toast').toast('show')
 
 }
+
+
+// const InputErr = e => {
+//   let toast_body = document.querySelector('.toast').lastElementChild;
+//   toast_body.textContent =  e
+//   $('.toast').toast('show') 
+
+// }
 
 const HandleRes = data => {
 
@@ -66,12 +48,62 @@ const HandleRes = data => {
 
 }
 
-const HandleErr = err => {
-  let parse = JSON.parse(err.message);
-  return console.error('ERROR!, El servidor ha devuelto una exepción',parse.Error)
+
+
+Form.addEventListener('submit', async (e) => {
+
+  e.preventDefault();
+
+  try {
+
+    if (MYRegex.test(edad.value)) {
+      throw new Error('Ingrese una edad válida')
+    }
+
+    const conn = await fetch('/tablas/submit', {
+      method: 'POST',
+      body: new FormData(Form),
+    })
+    let converting = await conn.json()
+    HandleRes(converting)
+
+  } catch (e) {
+
+    HandleErr(e)
+  }
+
+
+})
+
+// Es decir, si el server renderizo la tabla
+if (tabla !== null) {
+
+  tabla.addEventListener('click', async e => {
+    
+    try {
+      let hasdelet_ = e.target.classList.contains('delet_');
+      if (hasdelet_) {
+
+        //se toma el ID correspondiente de la base de datos
+        let id = { selected_id: e.target.dataset.worker }
+
+
+        const conn = await fetch('/tablas/del', {
+          method: 'POST',
+          body: JSON.stringify(id),
+          headers: {
+            'Content-Type':'application/json'
+          }
+        })
+        let converting = await conn.json()
+        HandleRes(converting)
+
+      }
+
+    } catch (e) {
+      HandleErr(e)
+    }
+
+  })
+
 }
-
-const InputErr = e => console.error('ERROR!!',e)
-
-
-
