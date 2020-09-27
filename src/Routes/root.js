@@ -18,10 +18,7 @@ Rutas.get('/tablas', async (req, res) => {
   try {
    const respuesta = await DB.query("SELECT * FROM nodetest");
    res.render('Table', { data: respuesta.rows })
-
   } catch (e) {
-    
-    console.log(e.message)
     res.send('¡ERROR!, intenta recargar la página')
   }
 })
@@ -39,12 +36,11 @@ Rutas.post('/tablas/submit', multer().none(), async (req, res) => {
     switch (e.code) {
       case '23505':
         res.json({Success:false,message:'El identificador único enviado ya existe en la base de datos'})    
-        break;
+      break;
     
       default:
-
         res.json({Success:false,message:'Ha ocurrido otro error.'})    
-        break;
+      break;
     }
 
   }
